@@ -1,5 +1,7 @@
 import pygame
 import math
+from bird_class import Bird
+import pipes_classj
 
 pygame.init()
 
@@ -25,6 +27,12 @@ bg_width = bg.get_width()
 #duplicate images to fill the window
 tiles = math.ceil(sc_width / bg_width) + 1
 
+#create a bird
+newBird = Bird(200, 228)
+bird_group = pygame.sprite.Group()
+bird_group.add(newBird)
+
+
 #game loop
 run = True
 
@@ -38,7 +46,9 @@ while run:
         # current tile *  background width + scrolling
         screen.blit(bg,(i * bg_width +scroll, 0))
 
-    scroll -= 2 #2 pixels to the left per frame
+    bird_group.draw(screen) #put the sprite in the game window
+    bird_group.update()
+    scroll -= 1 #2 pixels to the left per frame
 
     #reset the scrolling
     #when scroll's absolute value is less than the background width, reset
