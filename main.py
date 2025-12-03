@@ -33,9 +33,8 @@ bird_group = pygame.sprite.Group()
 bird_group.add(newBird)
 
 
-#game loop
+flying = False
 run = True
-
 while run:
 
     clock.tick(FPS)
@@ -47,7 +46,9 @@ while run:
         screen.blit(bg,(i * bg_width +scroll, 0))
 
     bird_group.draw(screen) #put the sprite in the game window
-    bird_group.update()
+
+    bird_group.update(flying)
+
     scroll -= 1 #2 pixels to the left per frame
 
     #reset the scrolling
@@ -59,6 +60,10 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        #starts the game
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                flying = True
 
     pygame.display.update()
 
