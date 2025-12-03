@@ -2,6 +2,7 @@ import pygame
 import math
 from bird_class import Bird
 import pipes_classj
+from menu_class import button
 
 pygame.init()
 
@@ -32,11 +33,27 @@ newBird = Bird(200, 228)
 bird_group = pygame.sprite.Group()
 bird_group.add(newBird)
 
+#create menu
+in_game = False
+#in_game - determines if we should be in-game
+buttonStart = button(sc_width,sc_height,in_game)
+menu_group = pygame.sprite.Group()
+menu_group.add(buttonStart)
+
 
 #game loop
 run = True
 
 while run:
+    #end game when pressing 'x'
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if buttonStart.getRect().collidepoint(event.pos):
+                in_game = True
+
 
     clock.tick(FPS)
 
@@ -46,8 +63,7 @@ while run:
         # current tile *  background width + scrolling
         screen.blit(bg,(i * bg_width +scroll, 0))
 
-    bird_group.draw(screen) #put the sprite in the game window
-    bird_group.update()
+    
     scroll -= 1 #2 pixels to the left per frame
 
     #reset the scrolling
@@ -55,10 +71,12 @@ while run:
     if abs(scroll) > bg_width:
         scroll = 0
 
-    #end game when pressing 'x'
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+    if in_game:
+        bird_group.draw(screen) #put the sprite in the game window
+        bird_group.update()
+    else:
+        menu_group.draw(screen)
+        menu_group.update()
 
     pygame.display.update()
 
