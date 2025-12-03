@@ -17,7 +17,7 @@ screen = pygame.display.set_mode((sc_width, sc_height))
 pygame.display.set_caption("Flappy Bird")
 
 #load image
-bg = pygame.image.load("bg.png").convert()
+bg = pygame.image.load("assets/images/bg.png").convert()
 
 #define game variables
 scroll = 0 #variable for horizontal movement

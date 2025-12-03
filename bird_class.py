@@ -6,9 +6,9 @@ class Bird(pygame.sprite.Sprite):
 
         #load sprites
         self.images = [
-            pygame.image.load("redbird-midflap.png").convert(),
-            pygame.image.load("redbird-downflap.png").convert(),
-            pygame.image.load("redbird-upflap.png").convert()
+            pygame.image.load("assets/images/redbird-midflap.png").convert(),
+            pygame.image.load("assets/images/redbird-downflap.png").convert(),
+            pygame.image.load("assets/images/redbird-upflap.png").convert()
                       ]
         self.index = 0 #which sprite from the list
         self.counter = 0 #control animation speed
