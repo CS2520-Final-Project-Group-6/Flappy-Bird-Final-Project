@@ -84,6 +84,9 @@ class Bird(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.images[self.index], self.angle) #update the rotation angle via vel value
     def update(self, flying=False): #contains the necessary methods for the bird sprites while the game runs
         self.animate()
+        # while flying is set to false, if true is passed into the function, then you can jump.
+        #rotate doesn't need to be a part of the if statement since it depends on the ability to jump.
+        # unable to jump --> bird doesn't rotate
         if flying:
             self.jump()
         self.rotate()

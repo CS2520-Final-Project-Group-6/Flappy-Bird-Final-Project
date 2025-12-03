@@ -33,7 +33,9 @@ bird_group = pygame.sprite.Group()
 bird_group.add(newBird)
 
 
-flying = False
+
+flying = False #initial state
+
 run = True
 while run:
 
@@ -47,7 +49,7 @@ while run:
 
     bird_group.draw(screen) #put the sprite in the game window
 
-    bird_group.update(flying)
+    bird_group.update(flying) #pass in true so that the bird can start jumping
 
     scroll -= 1 #2 pixels to the left per frame
 
@@ -60,7 +62,8 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-        #starts the game
+
+        #starts the game when 'space' is pressed
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 flying = True
