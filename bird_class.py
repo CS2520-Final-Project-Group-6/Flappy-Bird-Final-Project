@@ -28,11 +28,11 @@ class Bird(pygame.sprite.Sprite):
         if self.rect.bottom < 407: #stop movement once you hit the ground
             self.rect.y += int(self.vel)
 
-        #stop at top
+        #prevent jumping above the screen
         if self.rect.top <=0:
             self.rect.top = 0
 
-        ''' This is to let the bird jump off the ground 
+        ''' This is to let the bird jump off the ground but idk if that's allowed in the original game
         if self.rect.bottom >= 409:
             self.rect.bottom = 409
             self.vel = 0

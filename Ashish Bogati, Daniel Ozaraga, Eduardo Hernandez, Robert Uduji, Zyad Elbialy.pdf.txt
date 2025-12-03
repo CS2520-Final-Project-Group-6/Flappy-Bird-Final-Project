@@ -1,0 +1,5 @@
+Group 6 Final Project Members: 
+
+Ashish Bogati, Daniel Ozaraga, Eduardo Hernandez, Robert Uduji, Zyad Elbialy
+
+GitHub project link: https://github.com/CS2520-Final-Project-Group-6/Flappy-Bird-Final-Project
