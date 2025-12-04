@@ -49,7 +49,8 @@ class Bird(pygame.sprite.Sprite):
         if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
             self.clicked = True
             self.vel = -10 #negative velocity goes up
-            self.flapping()
+            if not self.fail:
+                self.flapping()
 
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
@@ -83,8 +84,12 @@ class Bird(pygame.sprite.Sprite):
             self.angle = self.vel * -2
         self.image = pygame.transform.rotate(self.images[self.index], self.angle) #update the rotation angle via vel value
     def update(self, flying=False): #contains the necessary methods for the bird sprites while the game runs
-        self.animate()
+
+        if not self.fail:
+            self.animate()
         # while flying is set to false, if true is passed into the function, then you can jump.
+
+        #when the game starts (passed from main.py), you can jump.
         #rotate doesn't need to be a part of the if statement since it depends on the ability to jump.
         # unable to jump --> bird doesn't rotate
         if flying:
