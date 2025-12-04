@@ -1,5 +1,5 @@
 import pygame
-
+import game_states
 class Bird(pygame.sprite.Sprite):
     pygame.mixer.init()
     def __init__(self, x, y):
@@ -20,7 +20,6 @@ class Bird(pygame.sprite.Sprite):
         self.rect.center = [x, y] #initial position
         self.vel = 0
         self.clicked = False
-        self.fail = False
 
     # MOVEMENT
     def jump(self):
@@ -29,11 +28,11 @@ class Bird(pygame.sprite.Sprite):
         self.vel += 0.5
         if self.rect.bottom < 407:  #while the bird is above  ground,
             self.rect.y += int(self.vel) #add the velocity to the y position of the bird to move down.
-            self.fail = False
+            game_states.fail = False
         else:
             self.rect.bottom = 407
             self.vel = 0
-            self.fail = True
+            game_states.fail = True
 
 
         # prevent jumping above the screen
@@ -80,18 +79,27 @@ class Bird(pygame.sprite.Sprite):
         #whatever sprite the group is on, it will be rotated as it is clicked
         #rotate(image source, angle)
         #follows gravity, rotate up but then slowly fall down
-        if not self.fail:
+        if not game_states.fail:
             self.angle = self.vel * -2
         self.image = pygame.transform.rotate(self.images[self.index], self.angle) #update the rotation angle via vel value
-    def update(self, game_state): #contains the necessary methods for the bird sprites while the game runs
+        
+    #Checks if you failed and removes the bird sprite if so
+    def destroy(self):
+        if game_states.fail:
+            self.kill() #remove the sprite from all groups
 
-        if not self.fail:
-            self.animate()
+    def update(self): #contains the necessary methods for the bird sprites while the game runs
+
+        #if not game_states.fail:
+            #self.animate()
         # while flying is set to false, if true is passed into the function, then you can jump.
 
         #when the game starts (passed from main.py), you can jump.
         #rotate doesn't need to be a part of the if statement since it depends on the ability to jump.
         # unable to jump --> bird doesn't rotate
-        if game_state:
+        if game_states.in_game:
+            self.animate()
             self.jump()
+            self.destroy()
+
         self.rotate()

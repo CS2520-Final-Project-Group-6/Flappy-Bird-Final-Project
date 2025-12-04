@@ -2,7 +2,8 @@ import pygame
 import math
 from bird_class import Bird
 import pipes_classj
-from menu_class import button
+import game_states
+from menu_class import button, buttonWithText
 
 pygame.init()
 
@@ -40,26 +41,25 @@ newBird = Bird(200, 228)
 bird_group = pygame.sprite.Group()
 bird_group.add(newBird)
 
+buttonHeight = 50
+buttonWidth = 225
+
 #create menu
-in_game = False
-#in_game - determines if we should be in-game
-buttonStart = button(sc_width,sc_height,in_game)
+buttonStart = buttonWithText(sc_width/2,sc_height/3, buttonWidth, buttonHeight, game_states.in_game, "Start Game", 30)
+buttonQuit = buttonWithText(sc_width/2,sc_height/2, buttonWidth, buttonHeight, game_states.run, "Quit Game", 30)
 menu_group = pygame.sprite.Group()
 menu_group.add(buttonStart)
+menu_group.add(buttonQuit)
 
 
 
-
-run = True
-while run:
+while game_states.run:
     #end game when pressing 'x'
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
+            game_states.run = False
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if buttonStart.getRect().collidepoint(event.pos):
-                in_game = True
+        
 
 
     clock.tick(FPS)
@@ -78,7 +78,7 @@ while run:
     
     scroll -= 0.5  # half a pixel to the left per frame
     gr_scroll -= 5 #5 pixels to the left per frame
-    
+
     #reset the scrolling
     #when scroll's absolute value is less than the background width, reset to 0
     if abs(scroll) > bg_width:
@@ -87,13 +87,23 @@ while run:
     #when ground scroll's abs value is less than the ground width, reset to 0
     if abs(gr_scroll) > gr_width:
         gr_scroll = 0
-
-    if in_game:
+    
+    #check game state if in game, show bird and update, else show menu
+    if game_states.in_game:
         bird_group.draw(screen) #put the sprite in the game window
-        bird_group.update(in_game)
+        bird_group.update()
+        if game_states.fail: #take you back to menu if you fail
+            game_states.in_game = False
+            
     else:
-        menu_group.draw(screen)
+        menu_group.draw(screen) #if not in game then show the menu
         menu_group.update()
+        #if you failed and are in the menu, reset fail state and create new bird in original position
+        #Can change the order of this later if needed(show different menu on fail vs quit to menu)
+        if game_states.fail:
+            game_states.fail = False
+            newBird = Bird(200, 228) #create a new bird instance
+            bird_group.add(newBird) #reset bird position by adding a new bird to the group
 
 
 
