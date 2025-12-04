@@ -49,8 +49,8 @@ class Bird(pygame.sprite.Sprite):
         if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
             self.clicked = True
             self.vel = -10 #negative velocity goes up
-            if not self.fail:
-                self.flapping()
+            #if not self.fail:
+                #self.flapping()
 
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
@@ -72,9 +72,9 @@ class Bird(pygame.sprite.Sprite):
         self.image = self.images[self.index]
 
     #sounds
-    def flapping(self):
-        flapSound = pygame.mixer.Sound("assets/audio/sfx_wing.mp3")
-        flapSound.play()
+    #def flapping(self):
+     #   flapSound = pygame.mixer.Sound("assets/audio/sfx_wing.mp3")
+      #  flapSound.play()
 
     def rotate(self):
         #whatever sprite the group is on, it will be rotated as it is clicked
@@ -83,7 +83,7 @@ class Bird(pygame.sprite.Sprite):
         if not self.fail:
             self.angle = self.vel * -2
         self.image = pygame.transform.rotate(self.images[self.index], self.angle) #update the rotation angle via vel value
-    def update(self, flying=False): #contains the necessary methods for the bird sprites while the game runs
+    def update(self, game_state): #contains the necessary methods for the bird sprites while the game runs
 
         if not self.fail:
             self.animate()
@@ -92,6 +92,6 @@ class Bird(pygame.sprite.Sprite):
         #when the game starts (passed from main.py), you can jump.
         #rotate doesn't need to be a part of the if statement since it depends on the ability to jump.
         # unable to jump --> bird doesn't rotate
-        if flying:
+        if game_state:
             self.jump()
         self.rotate()

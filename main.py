@@ -47,12 +47,6 @@ buttonStart = button(sc_width,sc_height,in_game)
 menu_group = pygame.sprite.Group()
 menu_group.add(buttonStart)
 
-#create menu
-in_game = False
-#in_game - determines if we should be in-game
-buttonStart = button(sc_width,sc_height,in_game)
-menu_group = pygame.sprite.Group()
-menu_group.add(buttonStart)
 
 
 
@@ -93,7 +87,7 @@ while run:
 
     if in_game:
         bird_group.draw(screen) #put the sprite in the game window
-        bird_group.update()
+        bird_group.update(in_game)
     else:
         menu_group.draw(screen)
         menu_group.update()
