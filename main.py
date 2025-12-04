@@ -75,15 +75,18 @@ while run:
         screen.blit(scaledGR, (i * gr_width + gr_scroll, 419))
 
 
-
-
     
-    scroll -= 1 #2 pixels to the left per frame
-
+    scroll -= 0.5  # half a pixel to the left per frame
+    gr_scroll -= 5 #5 pixels to the left per frame
+    
     #reset the scrolling
     #when scroll's absolute value is less than the background width, reset to 0
     if abs(scroll) > bg_width:
         scroll = 0
+
+    #when ground scroll's abs value is less than the ground width, reset to 0
+    if abs(gr_scroll) > gr_width:
+        gr_scroll = 0
 
     if in_game:
         bird_group.draw(screen) #put the sprite in the game window
