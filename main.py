@@ -2,10 +2,7 @@ import pygame
 import math
 from bird_class import Bird
 import pipes_classj
-
-
-#main.py only contains the background scrolling
-#objects from the bird and pipes class control the gameplay loop
+from menu_class import button
 
 pygame.init()
 
@@ -43,11 +40,33 @@ newBird = Bird(200, 228)
 bird_group = pygame.sprite.Group()
 bird_group.add(newBird)
 
+#create menu
+in_game = False
+#in_game - determines if we should be in-game
+buttonStart = button(sc_width,sc_height,in_game)
+menu_group = pygame.sprite.Group()
+menu_group.add(buttonStart)
 
-#Control when the game starts
-flying = False #initial state
+#create menu
+in_game = False
+#in_game - determines if we should be in-game
+buttonStart = button(sc_width,sc_height,in_game)
+menu_group = pygame.sprite.Group()
+menu_group.add(buttonStart)
+
+
+
 run = True
 while run:
+    #end game when pressing 'x'
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            run = False
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if buttonStart.getRect().collidepoint(event.pos):
+                in_game = True
+
 
     clock.tick(FPS)
 
@@ -64,35 +83,21 @@ while run:
 
 
 
-    bird_group.draw(screen) #put the sprite in the game window
-
-    #the bird object has a "fail" variable that is set to false.
-    #While it's false aka the bird is still flying, the backgrounds will scroll.
-    if not newBird.fail:
-        bird_group.update(flying) #pass in true so that the bird can start jumping
-        scroll -= 0.5  # half a pixel to the left per frame
-        gr_scroll -= 5 #5 pixels to the left per frame
-
+    
+    scroll -= 1 #2 pixels to the left per frame
 
     #reset the scrolling
     #when scroll's absolute value is less than the background width, reset to 0
     if abs(scroll) > bg_width:
         scroll = 0
 
-    #when ground scroll's abs value is less than the ground width, reset to 0
-    if abs(gr_scroll) > gr_width:
-        gr_scroll = 0
+    if in_game:
+        bird_group.draw(screen) #put the sprite in the game window
+        bird_group.update()
+    else:
+        menu_group.draw(screen)
+        menu_group.update()
 
-
-    #end game when pressing 'x'
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-
-        #starts the game when 'space' is pressed
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                flying = True
 
 
     pygame.display.update()
