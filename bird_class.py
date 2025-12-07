@@ -7,11 +7,18 @@ class Bird(pygame.sprite.Sprite):
 
         #load sprites
         self.images = [
-            pygame.image.load("assets/images/redbird-midflap.png").convert(),
-            pygame.image.load("assets/images/redbird-downflap.png").convert(),
-            pygame.image.load("assets/images/redbird-midflap.png").convert(),
-            pygame.image.load("assets/images/redbird-upflap.png").convert()
+            pygame.image.load("assets/images/redbird-midflap.png").convert_alpha(),
+            pygame.image.load("assets/images/redbird-downflap.png").convert_alpha(),
+            pygame.image.load("assets/images/redbird-midflap.png").convert_alpha(),
+            pygame.image.load("assets/images/redbird-upflap.png").convert_alpha()
                       ]
+
+        #making bird sprite slightly bigger
+        for i in range(len(self.images)):
+            w, h = self.images[i].get_size()
+            self.images[i] = pygame.transform.smoothscale(self.images[i], (int(w * 1.15), int(h*1.15)))
+
+
         self.index = 0 #which sprite from the list
         self.counter = 0 #control animation speed
 
@@ -30,9 +37,9 @@ class Bird(pygame.sprite.Sprite):
         if self.rect.bottom < 407:  #while the bird is above  ground,
             self.rect.y += int(self.vel) #add the velocity to the y position of the bird to move down.
             self.fail = False
-        else:
+        else: #stop movement if the bird hits the ground
             self.rect.bottom = 407
-            self.vel = 0
+            #self.vel = 0
             self.fail = True
 
 
@@ -49,8 +56,8 @@ class Bird(pygame.sprite.Sprite):
         if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
             self.clicked = True
             self.vel = -10 #negative velocity goes up
-            #if not self.fail:
-                #self.flapping()
+            if not self.fail:
+                self.flapping()
 
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
@@ -72,17 +79,19 @@ class Bird(pygame.sprite.Sprite):
         self.image = self.images[self.index]
 
     #sounds
-    #def flapping(self):
-     #   flapSound = pygame.mixer.Sound("assets/audio/sfx_wing.mp3")
-      #  flapSound.play()
+    def flapping(self):
+        flapSound = pygame.mixer.Sound("assets/audio/sfx_wing.mp3")
+        flapSound.play()
 
     def rotate(self):
         #whatever sprite the group is on, it will be rotated as it is clicked
         #rotate(image source, angle)
         #follows gravity, rotate up but then slowly fall down
         if not self.fail:
-            self.angle = self.vel * -2
+            self.angle = self.vel * -5
         self.image = pygame.transform.rotate(self.images[self.index], self.angle) #update the rotation angle via vel value
+
+
     def update(self, game_state): #contains the necessary methods for the bird sprites while the game runs
 
         if not self.fail:
@@ -92,6 +101,16 @@ class Bird(pygame.sprite.Sprite):
         #when the game starts (passed from main.py), you can jump.
         #rotate doesn't need to be a part of the if statement since it depends on the ability to jump.
         # unable to jump --> bird doesn't rotate
-        if game_state:
+        if game_state and not self.fail:
             self.jump()
-        self.rotate()
+            self.rotate()
+
+        else: #play falling animation if hitting pipe
+            self.vel += 0.5
+            self.rect.y += int(self.vel)
+            self.angle = self.vel * -5
+
+            if self.rect.bottom >= 407:
+                self.rect.bottom = 407
+                self.vel = 0
+
